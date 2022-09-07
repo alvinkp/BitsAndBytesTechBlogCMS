@@ -3,6 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 // const session = require("express-session");
 const sequelize = require("./config/connection");
+const { User } = require("./models");
 
 // Middleware
 app.use(express.json());
