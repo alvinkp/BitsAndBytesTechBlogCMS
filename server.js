@@ -3,16 +3,14 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 // const session = require("express-session");
 const sequelize = require("./config/connection");
+const controllers = require("./controllers");
 const { Blog, User } = require("./models");
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// GET route
-app.get("/", async (req, res) => {
-  res.send("test");
-});
+app.use(controllers);
 
 sequelize.sync({ force: true }).then(() => {
   app.listen(PORT, () => {
