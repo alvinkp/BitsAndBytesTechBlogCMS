@@ -1,4 +1,5 @@
 const { User } = require("../../models");
+const { restore } = require("../../models/User");
 
 const router = require("express").Router();
 
@@ -30,6 +31,42 @@ router.post("/", async (req, res) => {
     console.log(error);
     return res.status(500).json({
       message: "Something went wrong while trying to create your user.",
+    });
+  }
+});
+
+// Login route
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  if ((!email, !password)) {
+    return res
+      .status(400)
+      .json({ message: "Incorrect Login, please try again." });
+  }
+
+  try {
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    const hasValidPass = user.checkPassword(password);
+
+    if (hasValidPass) {
+      return res.status(200).json(user);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Email or Password is incorrect, please try again." });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong while trying to log in.",
     });
   }
 });
