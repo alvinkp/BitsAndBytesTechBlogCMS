@@ -5,6 +5,11 @@ const router = require("express").Router();
 
 // GET api/user route
 router.get("/", async (req, res) => {
+  if (req.session.loggedIn) {
+    res.json({ message: "You are logged in" });
+  } else {
+    res.json({ message: "You have logged out" });
+  }
   console.log("You're in the user route");
   res.end();
 });
@@ -70,8 +75,6 @@ router.post("/login", async (req, res) => {
         .status(404)
         .json({ message: "Email or Password is incorrect, please try again." });
     }
-
-    res.status(200).json(user);
   } catch (error) {
     console.log(error);
     return res.status(500).json({
