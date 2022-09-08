@@ -7,7 +7,6 @@ Blog.init(
   {
     blogId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
     title: {
       type: DataTypes.STRING,
