@@ -1,12 +1,13 @@
 const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 3001;
-// const session = require("express-session");
-const sequelize = require("./config/connection");
+const session = require("express-session");
+const { sequelize, sessionConfig } = require("./config/connection");
 const controllers = require("./controllers");
-const { Blog, User } = require("./models");
+
+const PORT = process.env.PORT || 3001;
+const app = express();
 
 // Middleware
+app.use(session(sessionConfig));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

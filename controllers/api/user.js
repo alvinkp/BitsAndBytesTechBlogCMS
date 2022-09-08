@@ -26,7 +26,12 @@ router.post("/", async (req, res) => {
       email,
       password,
     });
-    return res.status(201).json(newUser);
+
+    req.session.save(() => {
+      req.session.loggedIn = true;
+      req.session.userId = newUser.id;
+      return res.status(201).json(newUser);
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -55,7 +60,11 @@ router.post("/login", async (req, res) => {
     const hasValidPass = user.checkPassword(password);
 
     if (hasValidPass) {
-      return res.status(200).json(user);
+      req.session.save(() => {
+        req.session.loggedIn = true;
+        req.session.userId = user.id;
+        return res.status(200).json(user);
+      });
     } else {
       res
         .status(404)

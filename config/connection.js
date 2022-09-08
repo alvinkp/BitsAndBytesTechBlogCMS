@@ -1,4 +1,6 @@
 require("dotenv").config();
+const session = require("express-session");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const Sequelize = require("sequelize");
 
 let sequelize;
@@ -14,4 +16,19 @@ sequelize = new Sequelize(
   }
 );
 
-module.exports = sequelize;
+const sessionConfig = {
+  secret: process.env.SECRET,
+  cookie: {
+    maxAge: 1 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+  },
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize,
+  }),
+};
+
+module.exports = { sequelize, sessionConfig };
