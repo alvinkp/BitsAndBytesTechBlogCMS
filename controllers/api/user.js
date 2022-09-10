@@ -83,4 +83,11 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// log out route
+router.post("/logout", async (req, res) => {
+  req.session.destroy(() => {
+    res.status(204).end();
+  });
+});
+
 module.exports = router;

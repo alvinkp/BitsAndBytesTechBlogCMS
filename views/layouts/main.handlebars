@@ -19,8 +19,9 @@
         <a class="nav-link" href="#">Home</a>
         {{#if isLoggedIn}}
         <a class="nav-link" href="#">Dashboard</a>
-        <a class="nav-link" href="#">Logout</a>
-        {{#else}}
+        <a class="nav-link" href="/logout" id="logout">Logout</a>
+        <script src="/assets/scripts/logout.js"></script>
+        {{else}}
         <a class="nav-link" href="/login">Login / Sign Up</a>
         {{/if}}
       </div>
