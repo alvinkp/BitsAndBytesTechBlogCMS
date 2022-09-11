@@ -1,5 +1,9 @@
 const blogContainer = document.querySelector("#my-blogs");
 
+function newPost() {
+  window.location.href = "/newPost";
+}
+
 function createHTML(title, content, date) {
   let myTitle = document.createElement("h2");
   let myContent = document.createElement("p");

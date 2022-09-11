@@ -26,4 +26,15 @@ router.get("/dashboard", async (req, res) => {
   }
 });
 
+router.get("/newPost", async (req, res) => {
+  const isLoggedIn = req.session.loggedIn;
+  if (isLoggedIn) {
+    res.render("newPost", {
+      isLoggedIn,
+    });
+  } else {
+    res.render("login");
+  }
+});
+
 module.exports = router;
