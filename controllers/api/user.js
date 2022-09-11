@@ -1,5 +1,5 @@
 const { User } = require("../../models");
-const { restore } = require("../../models/User");
+const { restore } = require("../../models/user");
 
 const router = require("express").Router();
 

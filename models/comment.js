@@ -19,5 +19,5 @@ Comment.init(
     sequelize,
   }
 );
-console.log("remove me please");
+
 module.exports = Comment;

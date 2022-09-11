@@ -1,5 +1,5 @@
 const { Blog } = require("../../models");
-const { restore, beforeBulkDestroy } = require("../../models/User");
+const { restore, beforeBulkDestroy } = require("../../models/user");
 const { withAuth } = require("../../utils");
 
 const router = require("express").Router();
