@@ -1,6 +1,12 @@
 const blogNum = localStorage.getItem("blogId");
 const blogContainer = document.querySelector("#blog-post");
 const commentContainer = document.querySelector("#comment-container");
+const myModal = document.querySelector("#update-modal");
+const submitBtn = document.querySelector("#submit");
+const updateBtn = document.querySelector("#update");
+const deleteBtn = document.querySelector("#delete");
+const commentBox = document.querySelector("#content");
+const cancelBtn = document.querySelector("#cancel");
 
 function addAuthor(author, currentIndex) {
   let myAuthor = document.createElement("p");
@@ -8,6 +14,7 @@ function addAuthor(author, currentIndex) {
   myAuthor.classList.add("comment");
 
   myAuthor.textContent = "--- " + author;
+  myAuthor.id = currentIndex;
 
   holder.appendChild(myAuthor);
 }
@@ -26,10 +33,13 @@ function createHTML(content, currentIndex) {
     "comment"
   );
   commentHolder.id = currentIndex + "_holder";
+  myContent.id = currentIndex;
 
   myContent.textContent = content;
 
   commentHolder.appendChild(myContent);
+  commentContainer.classList.add("comment");
+  commentContainer.id = currentIndex;
   commentContainer.appendChild(commentHolder);
 }
 
@@ -37,10 +47,10 @@ function loadExistingComments() {
   fetch("/api/comment/getConnected:" + blogNum).then((response) =>
     response.json().then((comments) => {
       for (let i = 0; i < comments.length; i++) {
-        createHTML(comments[i].content, i);
+        createHTML(comments[i].content, comments[i].id);
         fetch("/api/user/findUser:" + comments[i].posterId).then((response) =>
           response.json().then((poster) => {
-            addAuthor(poster, i);
+            addAuthor(poster, comments[i].id);
           })
         );
       }
@@ -64,7 +74,31 @@ function handleLoadingBlogs() {
   loadExistingComments();
 }
 
-const blogFormHandler = async (event) => {
+function updateFormHandler(event) {
+  event.stopImmediatePropagation();
+  event.preventDefault();
+
+  const content = document.querySelector("#content").value;
+
+  if (content) {
+    fetch("/api/comment/update:" + returnCommentId(), {
+      method: "PUT",
+      body: JSON.stringify({ content }),
+      headers: { "Content-Type": "application/json" },
+    }).then((response) => {
+      if (response.ok) {
+        document.location.replace("/addComment");
+      } else {
+        document.location.replace("/");
+      }
+    });
+  }
+}
+
+updateBtn.addEventListener("click", updateFormHandler);
+
+const commentFormHandler = async (event) => {
+  event.stopImmediatePropagation();
   event.preventDefault();
 
   const content = document.querySelector("#content").value;
@@ -84,8 +118,63 @@ const blogFormHandler = async (event) => {
   }
 };
 
-document
-  .querySelector(".blog-form")
-  .addEventListener("submit", blogFormHandler);
+submitBtn.addEventListener("click", commentFormHandler);
+
+function cancelAction() {
+  event.stopImmediatePropagation();
+  event.preventDefault();
+  window.location.href = "/addComment";
+}
+
+cancelBtn.addEventListener("click", cancelAction);
+
+function returnCommentId() {
+  let id = localStorage.getItem("commentId");
+  if (id.includes("_holder")) {
+    id.split("_");
+    return id[0];
+  }
+  return id;
+}
+
+function deleteComment() {
+  event.stopImmediatePropagation();
+  event.preventDefault();
+  let commentId = returnCommentId();
+  fetch("/api/comment/delete:" + commentId, { method: "DELETE" }).then(
+    (response) =>
+      response.json().then(() => {
+        window.location.href = "/addComment";
+      })
+  );
+}
+
+deleteBtn.addEventListener("click", deleteComment);
+
+function updateCommentBox(commentId) {
+  updateBtn.classList.replace("invisible", "visible");
+  deleteBtn.classList.replace("invisible", "visible");
+  cancelBtn.classList.replace("invisible", "visible");
+  submitBtn.classList.replace("visible", "invisible");
+  fetch("/api/comment/getOne:" + commentId).then((response) =>
+    response.json().then((comment) => {
+      commentBox.textContent = comment;
+    })
+  );
+}
+
+commentContainer.onclick = function (event) {
+  var myComment = event.target;
+
+  if (myComment.classList.contains("comment")) {
+    let allElements = document.querySelector(`#${CSS.escape(myComment.id)}`);
+    console.log(allElements);
+
+    localStorage.setItem("commentId", myComment.id);
+    localStorage.setItem("postedComment", allElements.innerHTML);
+    console.log(localStorage.getItem("postedComment"));
+    updateCommentBox(myComment.id);
+  }
+};
 
 handleLoadingBlogs();
