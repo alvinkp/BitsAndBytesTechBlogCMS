@@ -9,17 +9,6 @@ function updatePost(id) {
   window.location.href = "/updatePost";
 }
 
-// async function updatePost(url, data) {
-//   const response = await fetch(url, {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": "application/json",
-//       body: JSON.stringify(data),
-//     },
-//   });
-//   return response.json();
-// }
-
 function createHTML(title, date, id) {
   let blogHolder = document.createElement("div");
   let myDate = date.split("T");
@@ -32,7 +21,6 @@ function createHTML(title, date, id) {
 
   blogHolder.appendChild(blogButton);
   blogContainer.appendChild(blogHolder);
-  console.log(blogHolder);
 }
 
 function handleLoadingBlogs() {

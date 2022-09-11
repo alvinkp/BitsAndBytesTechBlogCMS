@@ -1,5 +1,4 @@
 let blogID = localStorage.getItem("postId");
-console.log(blogID);
 let myTitle = document.querySelector("#title");
 let myContent = document.querySelector("#content");
 let updateBtn = document.querySelector("#update-btn");
@@ -7,7 +6,6 @@ let deleteBtn = document.querySelector("#delete-btn");
 
 function updateFormHandler(event) {
   event.preventDefault();
-  console.log("UPDATING!!!!!");
   const title = document.querySelector("#title").value;
   console.log(title);
   const content = document.querySelector("#content").value;
@@ -30,7 +28,6 @@ function updateFormHandler(event) {
 
 function deletePostHandler(event) {
   event.preventDefault();
-  console.log("DELETING!!!!!");
 
   fetch("/api/blog/delete:" + blogID, {
     method: "DELETE",
