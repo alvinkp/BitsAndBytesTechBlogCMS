@@ -37,4 +37,15 @@ router.get("/newPost", async (req, res) => {
   }
 });
 
+router.get("/updatePost", async (req, res) => {
+  const isLoggedIn = req.session.loggedIn;
+  if (isLoggedIn) {
+    res.render("updatePost", {
+      isLoggedIn,
+    });
+  } else {
+    res.render("login");
+  }
+});
+
 module.exports = router;

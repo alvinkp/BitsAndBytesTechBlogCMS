@@ -4,22 +4,33 @@ function newPost() {
   window.location.href = "/newPost";
 }
 
-function createHTML(title, content, date) {
-  let myTitle = document.createElement("h2");
-  let myContent = document.createElement("p");
-  let myAuthor = document.createElement("p");
+function updatePost(id) {
+  localStorage.setItem("postId", id);
+  window.location.href = "/updatePost";
+}
+
+// async function updatePost(url, data) {
+//   const response = await fetch(url, {
+//     method: "PUT",
+//     headers: {
+//       "Content-Type": "application/json",
+//       body: JSON.stringify(data),
+//     },
+//   });
+//   return response.json();
+// }
+
+function createHTML(title, date, id) {
   let blogHolder = document.createElement("div");
   let myDate = date.split("T");
+  let blogButton = document.createElement("button");
+  blogButton.classList.add("flex-fill", "btn", "btn-dark", "mt-2");
+  blogButton.id = id;
 
-  blogHolder.classList.add("bg-dark", "mt-4", "text-light", "py-3", "px-3");
+  blogButton.textContent = title + " --- " + myDate[0];
+  blogButton.setAttribute("onClick", "updatePost(" + blogButton.id + ")");
 
-  myTitle.textContent = title;
-  myContent.textContent = content;
-  myAuthor.textContent = myDate[0];
-
-  blogHolder.appendChild(myTitle);
-  blogHolder.appendChild(myContent);
-  blogHolder.appendChild(myAuthor);
+  blogHolder.appendChild(blogButton);
   blogContainer.appendChild(blogHolder);
   console.log(blogHolder);
 }
@@ -29,7 +40,7 @@ function handleLoadingBlogs() {
     response.json().then((myBlogs) => {
       console.log(myBlogs);
       for (myBlog of myBlogs) {
-        createHTML(myBlog.title, myBlog.content, myBlog.createdAt);
+        createHTML(myBlog.title, myBlog.createdAt, myBlog.id);
       }
     })
   );
