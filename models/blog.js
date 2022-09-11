@@ -5,9 +5,6 @@ class Blog extends Model {}
 
 Blog.init(
   {
-    blogId: {
-      type: DataTypes.INTEGER,
-    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,

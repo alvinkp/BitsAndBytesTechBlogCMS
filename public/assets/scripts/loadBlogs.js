@@ -9,7 +9,7 @@ let tempBlog = [];
 function addToTempBlog(title, content, author, date, id) {
   tempBlog.push({ title, content, author, date, id });
   sortBlogs(tempBlog);
-  createHTML(title, content, author, date);
+  createHTML(title, content, author, date, id);
 }
 
 function sortBlogs(blog) {
@@ -18,24 +18,37 @@ function sortBlogs(blog) {
   });
 }
 
-function createHTML(title, content, author, date) {
+function createHTML(title, content, author, date, id) {
   let myTitle = document.createElement("h2");
   let myContent = document.createElement("p");
   let myAuthor = document.createElement("p");
   let blogHolder = document.createElement("div");
   let myDate = date.split("T");
 
-  blogHolder.classList.add("bg-dark", "mt-4", "text-light", "py-3", "px-3");
+  myTitle.classList.add("blog-post");
+  myContent.classList.add("blog-post");
+  myAuthor.classList.add("blog-post");
+  blogHolder.classList.add(
+    "bg-dark",
+    "mt-4",
+    "text-light",
+    "py-3",
+    "px-3",
+    "blog-post"
+  );
+  blogHolder.id = id;
+  myTitle.id = id;
+  myContent.id = id;
+  myAuthor.id = id;
 
   myTitle.textContent = title;
   myContent.textContent = content;
-  myAuthor.textContent = author + " on " + myDate[0];
+  myAuthor.textContent = "By " + author + " on " + myDate[0];
 
   blogHolder.appendChild(myTitle);
   blogHolder.appendChild(myContent);
   blogHolder.appendChild(myAuthor);
   blogContainer.appendChild(blogHolder);
-  console.log(blogHolder);
 }
 
 function handleLoadingBlogs() {
@@ -65,3 +78,17 @@ function handleLoadingBlogs() {
 }
 
 handleLoadingBlogs();
+
+blogContainer.onclick = function (event) {
+  var myBlog = event.target;
+
+  if (myBlog.classList.contains("blog-post")) {
+    let allElements = document.querySelector(`#${CSS.escape(myBlog.id)}`);
+    console.log(allElements);
+
+    localStorage.setItem("blogId", myBlog.id);
+    localStorage.setItem("blogPost", allElements.innerHTML);
+    console.log(localStorage.getItem("blogPost"));
+    window.location.href = "/addComment";
+  }
+};

@@ -48,4 +48,15 @@ router.get("/updatePost", async (req, res) => {
   }
 });
 
+router.get("/addComment", async (req, res) => {
+  const isLoggedIn = req.session.loggedIn;
+  if (isLoggedIn) {
+    res.render("addComment", {
+      isLoggedIn,
+    });
+  } else {
+    res.render("login");
+  }
+});
+
 module.exports = router;

@@ -10,7 +10,7 @@ function updateFormHandler(event) {
   console.log("UPDATING!!!!!");
   const title = document.querySelector("#title").value;
   console.log(title);
-  const content = document.querySelector("#content").textContent;
+  const content = document.querySelector("#content").value;
   console.log(content);
 
   if (title && content) {

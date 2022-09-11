@@ -85,7 +85,6 @@ router.get("/all", async (req, res) => {
 // Update one blog
 router.put("/update:id", withAuth, async (req, res) => {
   const blogID = req.params.id.slice(1);
-  console.log("blogID____________________________________:" + blogID);
   const { title, content } = req.body;
 
   try {
