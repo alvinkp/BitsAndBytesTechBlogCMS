@@ -15,4 +15,15 @@ router.get("/login", async (req, res) => {
   });
 });
 
+router.get("/dashboard", async (req, res) => {
+  const isLoggedIn = req.session.loggedIn;
+  if (isLoggedIn) {
+    res.render("dashboard", {
+      isLoggedIn,
+    });
+  } else {
+    res.render("login");
+  }
+});
+
 module.exports = router;

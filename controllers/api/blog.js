@@ -4,6 +4,7 @@ const { withAuth } = require("../../utils");
 
 const router = require("express").Router();
 
+// Add Blog
 router.post("/", withAuth, async (req, res) => {
   const { title, content } = req.body;
   const UserId = req.session.userId;
@@ -24,6 +25,7 @@ router.post("/", withAuth, async (req, res) => {
   }
 });
 
+// Get Blog that belong to a user
 router.get("/", withAuth, async (req, res) => {
   const UserId = req.session.userId;
 
@@ -35,6 +37,19 @@ router.get("/", withAuth, async (req, res) => {
     });
     dbBlogs.map((blog) => blog.get({ plain: true }));
     res.status(200).json(dbBlogs);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong while trying to post your blog.",
+    });
+  }
+});
+
+// Get All blogs
+router.get("/all", async (req, res) => {
+  try {
+    const allBlogs = await Blog.findAll();
+    res.status(200).json(allBlogs);
   } catch (error) {
     console.log(error);
     return res.status(500).json({
